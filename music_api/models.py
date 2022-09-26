@@ -14,10 +14,25 @@ class User(AbstractUser):
 
 
 class Song(models.Model):
-    title = models.CharField(max_length=255)
+    SONG_CATEGORY = (
+        ('GOSPEL','gospel'),
+        ('HIPPOP','hippop'),
+        ('JUJU','juju'),
+    )
+    name = models.CharField(max_length=255)
     artist = models.CharField(max_length=255)
-    url = models.URLField()
+    uploaded_date = models.DateField(auto_now_add=True)
+    category = models.CharField(max_length=8, choices=SONG_CATEGORY)
+    song_url = models.URLField()
+    image_url = models.URLField()
     # uploaded_by = models.OneToOneField(User, on_delete=models.CASCADE)
     def __str__(self):
         return self.title
+
+class Playlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=255)
+    date_created = models.DateField(auto_now_add=True)
+    song = models.ManyToManyField(Song)
+
 
